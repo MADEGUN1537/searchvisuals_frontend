@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Media Search - Openverse Media</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .search-container {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .search-container input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            max-width: 500px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .search-container button:hover {
+            background-color: #555;
+        }
+
+        .media-type-selection {
+            margin-bottom: 20px;
+        }
+
+        .media-type-selection label {
+            margin-right: 20px;
+            font-size: 16px;
+        }
+
+        .media-results {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .main-image {
+            width: 80%;
+            max-width: 800px;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .additional-images {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 10px;
+            width: 80%;
+            max-width: 800px;
+            justify-content: flex-start;
+        }
+
+        .additional-images img {
+            height: 100px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .load-more {
+            display: none;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .load-more.show {
+            display: block;
+            transform: translateX(0);
+        }
+
+        .load-more:hover {
+            background-color: #555;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .additional-images {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 10px;
+    width: 90%;
+    max-width: 900px;
+    justify-content: flex-start;
+    scroll-behavior: smooth;
+}
+.additional-images::-webkit-scrollbar {
+    height: 8px;
+}
+.additional-images::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+.additional-images::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo" style="color: white; text-decoration: none; font-size: 24px;">Openverse Media</a>
+            <div class="search-container">
+                <div class="media-type-selection">
+                    <label>
+                        <input type="radio" name="mediaType" value="images" checked> Images
+                    </label>
+                    <label>
+                        <input type="radio" name="mediaType" value="videos"> Videos
+                    </label>
+                    <label>
+                        <input type="radio" name="mediaType" value="audio"> Audio
+                    </label>
+                </div>
+                <input type="text" id="search-input" placeholder="Search for media...">
+                <button onclick="searchMedia()" id="search-btn">Search</button>
+            </div>
+        </header>
+        <main class="media-results">
+            <img src="" id="mainImage" class="main-image" alt="Main Image">
+            <div class="additional-images" id="results-container">
+                <!-- Media results will be displayed here -->
+            </div>
+        </main> <br>
+        <button class="load-more" id="loadMoreBtn" style="display: none;">Load More</button>
+        <!-- Modal for viewing full-size media -->
+<div id="mediaModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
+    <span onclick="closeModal()" style="position:absolute; top:20px; right:30px; color:#fff; font-size:36px; cursor:pointer;">&times;</span>
+    <div id="modalContent" style="max-width:90%; max-height:90%; display:flex; justify-content:center; align-items:center;"></div>
+</div>
+
+    </body>
+        
+        <script>
+function searchMedia() {
+    const query = document.getElementById("search-input").value;
+    const mediaType = document.querySelector("input[name='mediaType']:checked").value;
+    const resultsDiv = document.getElementById("results-container");
+    let mainDisplay = document.getElementById("mainImage");
+
+    // Clear previous results and main media display
+    resultsDiv.innerHTML = "";
+    mainDisplay.src = "";
+    mainDisplay.style.display = "none";
+
+    // Fetch results from the Render backend
+    fetch(`https://searchvisual-backend.onrender.com/search?query=${encodeURIComponent(query)}&media_type=${mediaType}&user_id=1`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.results && data.results.length > 0) {
+                data.results.forEach((item, index) => {
+                    const url = item.url;
+                    const title = item.title || "Untitled";
+
+                    // Create a container for each media result
+                    const wrapper = document.createElement("div");
+                    wrapper.style.display = "flex";
+                    wrapper.style.flexDirection = "column";
+                    wrapper.style.alignItems = "center";
+
+                    let mediaThumb;
+
+                    // Dynamically create the correct media thumbnail (image, audio, or video)
+                    if (mediaType === 'images') {
+                        mediaThumb = document.createElement("img");
+                        mediaThumb.src = url;
+                        mediaThumb.alt = title;
+                        mediaThumb.style.height = "100px";
+                    } else if (mediaType === 'audio') {
+                        mediaThumb = document.createElement("audio");
+                        mediaThumb.controls = true;
+                        mediaThumb.src = url;
+                        mediaThumb.style.height = "40px";
+                        mediaThumb.style.marginBottom = "5px";
+                    } else if (mediaType === 'videos') {
+                        mediaThumb = document.createElement("video");
+                        mediaThumb.src = url;
+                        mediaThumb.controls = true;
+                        mediaThumb.style.height = "100px";
+                    }
+
+                    mediaThumb.style.cursor = "pointer";
+                    mediaThumb.style.marginRight = "10px";
+                    mediaThumb.onclick = () => updateMainMedia(url, mediaType);
+
+                    // Create a caption for the media
+                    const caption = document.createElement("p");
+                    caption.textContent = title;
+                    caption.style.fontSize = "14px";
+                    caption.style.color = "#444";
+                    caption.style.margin = "5px 0 0 0";
+
+                    // Append the thumbnail and caption to the wrapper
+                    wrapper.appendChild(mediaThumb);
+                    wrapper.appendChild(caption);
+                    resultsDiv.appendChild(wrapper);
+
+                    // Select the first media by default
+                    if (index === 0) {
+                        mediaThumb.click();
+                    }
+                });
+            } else {
+                resultsDiv.innerHTML = "No results found.";
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            resultsDiv.innerText = "Error fetching results.";
+        });
+}
+
+function updateMainMedia(url, mediaType) {
+    const container = document.querySelector(".media-results");
+    const oldMain = document.getElementById("mainImage");
+
+    if (oldMain) {
+        oldMain.remove();
+    }
+
+    let newMain;
+
+    // Update the main media display based on the selected media type
+    if (mediaType === "images") {
+        newMain = document.createElement("img");
+        newMain.src = url;
+        newMain.alt = "Main Image";
+        newMain.className = "main-image";
+        newMain.id = "mainImage";
+        newMain.onclick = () => openModal(`<img src="${url}" style="max-width:100%; max-height:90vh;">`);
+    } else if (mediaType === "videos") {
+        newMain = document.createElement("video");
+        newMain.src = url;
+        newMain.controls = true;
+        newMain.autoplay = true;
+        newMain.className = "main-image";
+        newMain.id = "mainImage";
+        newMain.onclick = () => openModal(`<video src="${url}" controls autoplay style="max-width:100%; max-height:90vh;"></video>`);
+    } else if (mediaType === "audio") {
+        newMain = document.createElement("audio");
+        newMain.src = url;
+        newMain.controls = true;
+        newMain.autoplay = true;
+        newMain.className = "main-image";
+        newMain.id = "mainImage";
+        newMain.onclick = () => openModal(`<audio src="${url}" controls autoplay style="width:80%;"></audio>`);
+    }
+
+    container.insertBefore(newMain, document.getElementById("results-container"));
+}
+
+function openModal(contentHTML) {
+    const modal = document.getElementById("mediaModal");
+    const content = document.getElementById("modalContent");
+    content.innerHTML = contentHTML;
+    modal.style.display = "flex";
+}
+
+function closeModal() {
+    const modal = document.getElementById("mediaModal");
+    modal.style.display = "none";
+    document.getElementById("modalContent").innerHTML = "";
+}
+
+</script>
+ 
+
+</body>
+</html>

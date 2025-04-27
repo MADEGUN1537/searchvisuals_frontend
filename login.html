@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login - Openverse Media</title>
+    <style>
+        /* Global Colors */
+        :root {
+            --main-color: #4CAF50; /* Green */
+            --secondary-color: #333333; /* Dark gray */
+            --accent-color: #FF5722; /* Accent orange */
+            --text-color: #ffffff; /* Text color */
+            --light-gray: #f4f4f4; /* Light gray background */
+            --dark-gray: #212121; /* Dark background */
+            --dark-text: #1a1a1a; /* Dark text for better visibility */
+            --light-text: #d1d1d1; /* Light text */
+        }
+
+        /* General Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            color: var(--secondary-color);
+            background-color: var(--light-gray);
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        header .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-color);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: logoAnimation 2s ease-out;
+        }
+
+        header .logo:hover {
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        /* Header Animation */
+        @keyframes logoAnimation {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Login Section */
+        .login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: var(--dark-gray);
+            animation: fadeIn 2s ease-out;
+        }
+
+        .login-section {
+            background-color: var(--light-gray);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            animation: fadeInText 2s ease-out;
+        }
+
+        .login-section h2 {
+            font-size: 2rem;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .input-field {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: var(--light-gray);
+            transition: all 0.3s ease;
+        }
+
+        .input-field input:focus {
+            border-color: var(--main-color);
+            outline: none;
+        }
+
+        .login-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--main-color);
+            color: var(--text-color);
+            text-decoration: none;
+            margin-top: 20px;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease-in-out;
+            animation: fadeInButton 2s ease-out;
+        }
+
+        .login-button:hover {
+            background-color: var(--accent-color);
+        }
+
+        .signup-link {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 1rem;
+            color: var(--dark-text);
+            text-decoration: none;
+        }
+
+        .signup-link:hover {
+            color: var(--main-color);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInButton {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .login-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .login-button {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo">SearchVisuals</a>
+  </header>
+
+  <div class="login-page">
+    <div class="login-section">
+      <h2>Login</h2>
+      <form id="login-form" method="POST" novalidate>
+
+        <div class="input-field">
+          <label for="email" class="sr-only">Email</label>
+          <input type="email" placeholder="Email" id="email" required />
+        </div>
+        <div class="input-field">
+          <label for="password" class="sr-only">Password</label>
+          <input type="password" placeholder="Password" id="password" required />
+        </div>
+        <button type="submit" class="login-button">Login</button>
+        <div class="input-field">
+          <a href="signup.html" class="signup-link">Don't have an account? Sign up</a>
+        </div>
+        <div id="message" aria-live="polite" style="text-align:center; margin-top:10px; color: red;"></div>
+      </form>
+    </div>
+  </div>
+
+  <footer style="text-align: center; padding: 20px; color: var(--light-text); background-color: var(--secondary-color);">
+    <p>&copy; 2025 Openverse Media. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById("login-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const response = await fetch("https://searchvisual-backend.onrender.com/api/auth/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include", // This ensures cookies (like session) are sent
+        body: JSON.stringify({ email, password })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+        // Save user_id in session storage or localStorage
+        localStorage.setItem("user_id", result.user_id);
+
+        // ✅ Redirect to your desired page (NOT mediasearch.html)
+        window.location.href = "mediasearch.html"; // Replace with your desired page
+    } else {
+        alert(result.error || "Login failed");
+    }
+});
+
+    </script>
+    
+  
+</body>
+</html>
