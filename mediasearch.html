@@ -148,7 +148,7 @@
 <body>
 
     <header>
-        <a href="index.html" class="logo" style="color: white; text-decoration: none; font-size: 24px;">Openverse Media</a>
+        <a href="index.html" class="logo" style="color: white; text-decoration: none; font-size: 24px;">searchVisuals</a>
             <div class="search-container">
                 <div class="media-type-selection">
                     <label>
@@ -172,7 +172,7 @@
             </div>
         </main> <br>
         <button class="load-more" id="loadMoreBtn" style="display: none;">Load More</button>
-        <!-- Modal for viewing full-size media -->
+    
 <div id="mediaModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
     <span onclick="closeModal()" style="position:absolute; top:20px; right:30px; color:#fff; font-size:36px; cursor:pointer;">&times;</span>
     <div id="modalContent" style="max-width:90%; max-height:90%; display:flex; justify-content:center; align-items:center;"></div>
@@ -187,12 +187,10 @@ function searchMedia() {
     const resultsDiv = document.getElementById("results-container");
     let mainDisplay = document.getElementById("mainImage");
 
-    // Clear previous results and main media display
     resultsDiv.innerHTML = "";
     mainDisplay.src = "";
     mainDisplay.style.display = "none";
 
-    // Fetch results from the Render backend
     fetch(`https://searchvisual-backend.onrender.com/search?query=${encodeURIComponent(query)}&media_type=${mediaType}&user_id=1`)
         .then(res => res.json())
         .then(data => {
@@ -269,7 +267,6 @@ function updateMainMedia(url, mediaType) {
 
     let newMain;
 
-    // Update the main media display based on the selected media type
     if (mediaType === "images") {
         newMain = document.createElement("img");
         newMain.src = url;
