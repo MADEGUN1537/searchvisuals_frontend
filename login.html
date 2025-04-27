@@ -235,9 +235,8 @@
 
         if (response.ok) {
             console.log('Login Successful!', data);
-            // You can store user_id or token here if you want
-            // localStorage.setItem('user_id', data.user_id);
             alert("Login Successful!");
+            window.location.href = "mediasearch.html";
         } else {
             console.error('Login failed:', data.error);
             alert(data.error || "Login failed");
