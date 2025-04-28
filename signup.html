@@ -194,11 +194,11 @@
   </footer>
 
   <script>
-    document.getElementById("signup-form").addEventListener("submit", async function (e) {
+   document.getElementById("signup-form").addEventListener("submit", async function (e) {
     e.preventDefault();
- const spinner = document.getElementById('loading-spinner'); // Get the spinner element
-    spinner.style.display = 'block';
-      
+    const spinner = document.getElementById('loading-spinner'); // Get the spinner element
+    spinner.style.display = 'block'; // Show the spinner when the form is submitted
+
     const username = this.username.value.trim();
     const email = this.email.value.trim();
     const password = this.password.value;
@@ -206,6 +206,7 @@
 
     if (password !== confirm_password) {
         alert("Passwords do not match.");
+        spinner.style.display = 'none'; // Hide the spinner if there's an error
         return;
     }
 
@@ -234,6 +235,8 @@
     } catch (error) {
         console.error("Error:", error);
         alert("Something went wrong. Please try again.");
+    } finally {
+        spinner.style.display = 'none'; // Hide the spinner after the process is complete
     }
 });
 
