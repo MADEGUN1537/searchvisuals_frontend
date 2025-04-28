@@ -139,10 +139,20 @@
         padding: 30px 20px;
       }
     }
-    <!-- Add the loading spinner here -->
-<div id="loading-spinner" style="display:none; text-align:center; margin-top:20px;">
-    <div class="spinner"></div>
-</div>
+  .spinner {
+  border: 4px solid #f3f3f3; /* Light gray */
+  border-top: 4px solid var(--main-color); /* Green */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 
   </style>
 </head>
@@ -186,8 +196,8 @@
   <script>
     document.getElementById("signup-form").addEventListener("submit", async function (e) {
     e.preventDefault();
-const spinner = document.getElementById('loading-spinner'); // Get the spinner element
-    const messageDiv = document.getElementById('message');
+ const spinner = document.getElementById('loading-spinner'); // Get the spinner element
+    spinner.style.display = 'block';
       
     const username = this.username.value.trim();
     const email = this.email.value.trim();
