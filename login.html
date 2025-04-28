@@ -175,6 +175,21 @@
                 padding: 10px 20px;
             }
         }
+        /* CSS for the spinner */
+.spinner {
+    border: 4px solid #f3f3f3; /* Light gray */
+    border-top: 4px solid var(--main-color); /* Green color */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
     </style>
 </head>
 <body>
@@ -200,6 +215,11 @@
         <div class="input-field">
           <a href="signup.html" class="signup-link">Don't have an account? Sign up</a>
         </div>
+          <!-- Add the loading spinner here -->
+<div id="loading-spinner" style="display:none; text-align:center; margin-top:20px;">
+    <div class="spinner"></div>
+</div>
+
         <div id="message" aria-live="polite" style="text-align:center; margin-top:10px; color: red;"></div>
       </form>
     </div>
@@ -210,7 +230,13 @@
   </footer>
 
   <script>
-   async function loginUser(email, password) {
+  async function loginUser(email, password) {
+    const spinner = document.getElementById('loading-spinner'); // Get the spinner element
+    const messageDiv = document.getElementById('message');
+    
+    // Show the spinner
+    spinner.style.display = 'block';
+    
     try {
         const response = await fetch('https://searchvisual-backend.onrender.com/api/auth/login', {
             method: 'POST',
@@ -226,15 +252,20 @@
 
         const data = await response.json();
 
+        // Hide the spinner after the response
+        spinner.style.display = 'none';
+
         if (response.ok) {
             console.log('Login Successful!', data);
             alert("Login Successful!");
-            window.location.href = "mediasearch.html";
+            window.location.href = "mediasearch.html"; // Redirect on successful login
         } else {
             console.error('Login failed:', data.error);
-            alert(data.error || "Login failed");
+            messageDiv.innerText = data.error || "Login failed"; // Show error message
         }
     } catch (error) {
+        // Hide the spinner in case of an error
+        spinner.style.display = 'none';
         console.error('Network Error:', error);
         alert("Network error occurred. Please try again later.");
     }
