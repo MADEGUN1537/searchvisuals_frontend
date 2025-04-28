@@ -139,6 +139,11 @@
         padding: 30px 20px;
       }
     }
+    <!-- Add the loading spinner here -->
+<div id="loading-spinner" style="display:none; text-align:center; margin-top:20px;">
+    <div class="spinner"></div>
+</div>
+
   </style>
 </head>
 <body>
@@ -165,6 +170,11 @@
         </div>
         <button type="submit" class="signup-button">Sign Up</button>
         <a href="login.html" class="login-link">Already have an account? Log in</a>
+        <!-- Add the loading spinner here -->
+<div id="loading-spinner" style="display:none; text-align:center; margin-top:20px;">
+    <div class="spinner"></div>
+</div>
+
       </form>
     </div>
   </div>
@@ -176,7 +186,9 @@
   <script>
     document.getElementById("signup-form").addEventListener("submit", async function (e) {
     e.preventDefault();
-
+const spinner = document.getElementById('loading-spinner'); // Get the spinner element
+    const messageDiv = document.getElementById('message');
+      
     const username = this.username.value.trim();
     const email = this.email.value.trim();
     const password = this.password.value;
