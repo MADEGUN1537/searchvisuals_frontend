@@ -1,4 +1,4 @@
-# Searchisual Web Application
+# Searchvisual Web Application
 
 A full-stack web application that allows users to search for openly licensed media using the [Openverse API](https://api.openverse.org/v1/). Developed for the CMP9134 Software Engineering module.
 
